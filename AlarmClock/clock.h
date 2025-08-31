@@ -5,7 +5,9 @@ class Clock {
   public:
     void Init();
     void RTCset();
-    String GetTime();
+    String GetTimeAsString();
+    tm GetTime();
+    void SetTime(tm t);
 };
 
 #endif

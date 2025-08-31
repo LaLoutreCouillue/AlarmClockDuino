@@ -3,8 +3,8 @@
 
 enum e_Views {
   e_None, //0
-  e_Clock, //1
-  e_Settings, //2
+  e_Main, //1
+  e_TimeSetting, //2
   e_Alarm //3
 };
 

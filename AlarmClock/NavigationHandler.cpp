@@ -1,10 +1,8 @@
 #include "NavigationHandler.h"
 
-e_Views CurrentView = e_None;
-e_Views RequestedView = e_None;
 
 void NavigationHandler::Init() {
-  RequestedView = e_Clock;
+  RequestedView = e_TimeSetting;
 }
 
 void NavigationHandler::NavigateTo(e_Views requestedView) {

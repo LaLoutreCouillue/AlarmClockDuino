@@ -10,8 +10,8 @@ class NavigationHandler {
     e_Views GetRequestedView();
     e_Views GetCurrentView();
   private:
-    e_Views CurrentView;
-    e_Views RequestedView;
+    e_Views CurrentView = e_None;
+    e_Views RequestedView = e_None;
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "Clock.h"
-#include "ClockView.h"
+#include "MainView.h"
+#include "TimeSettingView.h"
 #include "AlarmsManager.h"
 #include "NavigationHandler.h"
 #include "Arduino_H7_Video.h"
@@ -14,7 +15,8 @@ unsigned long lastUpdate = 0;
 Clock _clock;
 AlarmsManager _alarmsManager;
 NavigationHandler _navigationHandler;
-ClockView _clockView(_clock, _navigationHandler);
+MainView _mainView(_clock, _navigationHandler);
+TimeSettingView _timeSettingView(_clock, _navigationHandler);
 
 void setup() {
   // put your setup code here, to run once:
@@ -25,6 +27,7 @@ void setup() {
   _clock.Init();
   _navigationHandler.Init();
   _alarmsManager.Init();
+  delay(3000);
 }
 
 void loop() {
@@ -39,12 +42,14 @@ void loop() {
     case e_None:
       // statements
       break;
-    case e_Clock:
+    case e_Main:
       // statements
-      _clockView.Render(Display.width(), Display.height());
+      _mainView.Render(Display.width(), Display.height());
       _navigationHandler.NavigationDone();
       break;
-    case e_Settings:
+    case e_TimeSetting:
+      _timeSettingView.Render(Display.width(), Display.height());
+      _navigationHandler.NavigationDone();
       // statements
       break;
     case e_Alarm:
@@ -63,11 +68,11 @@ void loop() {
         case e_None:
           // statements
           break;
-        case e_Clock:
-          _clockView.Update();
+        case e_Main:
+          _mainView.Update();
           break;
-        case e_Settings:
-          // statements
+        case e_TimeSetting:
+          _timeSettingView.Update();
           break;
         case e_Alarm:
           // statements
