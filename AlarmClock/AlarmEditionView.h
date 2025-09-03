@@ -1,30 +1,29 @@
-#ifndef TIMESETTINGVIEW_H
-#define TIMESETTINGVIEW_H
+#ifndef ALARMEDITIONVIEW_H
+#define ALARMEDITIONVIEW_H
 #include "Arduino_H7_Video.h"
 #include "lvgl.h"
-#include "clock.h"
+#include "AlarmsManager.h"
 #include "IView.h"
 #include "NavigationHandler.h"
 #include "ControlContext.h"
 
-class TimeSettingView : public IView{
+class AlarmEditionView : public IView{
   public:
-    TimeSettingView(Clock& c, NavigationHandler& nav);
+    AlarmEditionView(AlarmsManager& am, NavigationHandler& nav);
     void Render(int width, int height, uint8_t param);
     void Update();
     void IncreaseTime(uint8_t id);
     void DecreaseTime(uint8_t id);
-    void SaveTime();
-    void GoToMain();
+    void ToggleDay(uint8_t id, bool value);
+    void SaveAlarm();
+    void GoBack();
   private:
-    ControlContext _controlContexts[12];
+    ControlContext _controlContexts[13];
     void RefreshTime();
-    tm _time;
-    Clock& refToC;
+    uint8_t _alarmId;
+	  Alarm _alarm;
+    AlarmsManager& refToAm;
     NavigationHandler& refToNav;
-    lv_obj_t* _dayLabel;
-    lv_obj_t* _monthLabel;
-    lv_obj_t* _yearLabel;
     lv_obj_t* _hourLabel;
     lv_obj_t* _minuteLabel;
 };

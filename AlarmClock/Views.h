@@ -5,7 +5,8 @@ enum e_Views {
   e_None, //0
   e_Main, //1
   e_TimeSetting, //2
-  e_Alarm //3
+  e_AlarmsManager, //3
+  e_AlarmEdition //4
 };
 
 #endif

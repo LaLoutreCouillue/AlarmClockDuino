@@ -2,22 +2,27 @@
 
 
 void NavigationHandler::Init() {
-  RequestedView = e_TimeSetting;
+  _requestedView = e_Main;
 }
 
-void NavigationHandler::NavigateTo(e_Views requestedView) {
-  RequestedView = requestedView;
+void NavigationHandler::NavigateTo(e_Views requestedView, uint8_t param) {
+  _requestedView = requestedView;
+  _param = param;
 }
 
 void NavigationHandler::NavigationDone() {
-  CurrentView = RequestedView;
-  RequestedView = e_None;
+  _currentView = _requestedView;
+  _requestedView = e_None;
 }
 
 e_Views NavigationHandler::GetRequestedView() {
-  return RequestedView;
+  return _requestedView;
 }
 
 e_Views NavigationHandler::GetCurrentView() {
-  return CurrentView;
+  return _currentView;
+}
+
+uint8_t NavigationHandler::GetParam() {
+  return _param;
 }

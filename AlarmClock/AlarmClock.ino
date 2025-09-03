@@ -1,6 +1,8 @@
 #include "Clock.h"
 #include "MainView.h"
 #include "TimeSettingView.h"
+#include "AlarmsManagerView.h"
+#include "AlarmEditionView.h"
 #include "AlarmsManager.h"
 #include "NavigationHandler.h"
 #include "Arduino_H7_Video.h"
@@ -17,6 +19,8 @@ AlarmsManager _alarmsManager;
 NavigationHandler _navigationHandler;
 MainView _mainView(_clock, _navigationHandler);
 TimeSettingView _timeSettingView(_clock, _navigationHandler);
+AlarmsManagerView _alarmsManagerView(_alarmsManager, _navigationHandler);
+AlarmEditionView _alarmEditionView(_alarmsManager, _navigationHandler);
 
 void setup() {
   // put your setup code here, to run once:
@@ -43,17 +47,20 @@ void loop() {
       // statements
       break;
     case e_Main:
-      // statements
-      _mainView.Render(Display.width(), Display.height());
+      _mainView.Render(Display.width(), Display.height(), _navigationHandler.GetParam());
       _navigationHandler.NavigationDone();
       break;
     case e_TimeSetting:
-      _timeSettingView.Render(Display.width(), Display.height());
+      _timeSettingView.Render(Display.width(), Display.height(), _navigationHandler.GetParam());
       _navigationHandler.NavigationDone();
-      // statements
       break;
-    case e_Alarm:
-      // statements
+    case e_AlarmsManager:
+      _alarmsManagerView.Render(Display.width(), Display.height(), _navigationHandler.GetParam());
+      _navigationHandler.NavigationDone();
+      break;
+    case e_AlarmEdition:
+      _alarmEditionView.Render(Display.width(), Display.height(), _navigationHandler.GetParam());
+      _navigationHandler.NavigationDone();
       break;
     default:
       // statements
@@ -74,8 +81,11 @@ void loop() {
         case e_TimeSetting:
           _timeSettingView.Update();
           break;
-        case e_Alarm:
-          // statements
+        case e_AlarmsManager:
+          _alarmsManagerView.Update();
+          break;
+        case e_AlarmEdition:
+          _alarmEditionView.Update();
           break;
         default:
           // statements

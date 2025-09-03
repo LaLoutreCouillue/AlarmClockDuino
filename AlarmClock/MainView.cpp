@@ -9,13 +9,16 @@ static void btn_event(lv_event_t * e) {
   lv_obj_t * btn = (lv_obj_t*)lv_event_get_target(e);
 
   //Get Back the structure
-  ButtonContext* ctx = (ButtonContext*)lv_obj_get_user_data(btn);
+  ControlContext* ctx = (ControlContext*)lv_obj_get_user_data(btn);
   MainView* instance = static_cast<MainView*>(ctx->instance); //store the instance
   uint8_t action = ctx->action;
 
   switch(action){
-      case 1: //Increase
+      case 1: //Time Setting
         instance->GoToTimeSetting();
+        break;
+      case 2: //Alarm Setting
+        instance->GoToAlarmsManager();
         break;
   }
 }
@@ -23,7 +26,7 @@ static void btn_event(lv_event_t * e) {
 
 MainView::MainView(Clock& c, NavigationHandler& nav) : refToC(c), refToNav(nav) {}
 
-void MainView::Render(int width, int height) {
+void MainView::Render(int width, int height, uint8_t param) {
   //Clean old view
   lv_obj_clean(lv_scr_act());
   //Display & Grid Setup
@@ -31,7 +34,7 @@ void MainView::Render(int width, int height) {
   lv_obj_set_size(screen, width, height);
   
   static lv_coord_t col_dsc[] = {
-    LV_GRID_FR(1), 
+    LV_GRID_FR(1), LV_GRID_FR(1), 
     LV_GRID_TEMPLATE_LAST
   };
 
@@ -48,10 +51,10 @@ void MainView::Render(int width, int height) {
   lv_obj_t* obj;
   lv_obj_t* label;
   lv_obj_t* button;
+  //First button
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 1,  //column
                       LV_GRID_ALIGN_STRETCH, 0, 1);      //row
-  //Create the button
   button = lv_btn_create(obj);
   lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
   lv_obj_center(button);
@@ -61,18 +64,33 @@ void MainView::Render(int width, int height) {
   lv_label_set_text(label, "TimeSettings");
   lv_obj_center(label);
   // Store the index and the instance as user data
-  _buttonContexts[0] = { this, 0, 1 };
-  lv_obj_set_user_data(button, & _buttonContexts[0]);
+  _controlContexts[0] = { this, 1, 0 };
+  lv_obj_set_user_data(button, & _controlContexts[0]);
+  //Second button
+  obj = lv_obj_create(grid);
+  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 1, 1,  //column
+                      LV_GRID_ALIGN_STRETCH, 0, 1);      //row
+  button = lv_btn_create(obj);
+  lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
+  lv_obj_center(button);
+  lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
+  //Add the label
+  label = lv_label_create(button);
+  lv_label_set_text(label, "Alarm Settings");
+  lv_obj_center(label);
+  // Store the index and the instance as user data
+  _controlContexts[1] = { this, 2, 0 };
+  lv_obj_set_user_data(button, & _controlContexts[1]);
 
   //middle row
   obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 1,  //column
+  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 2,  //column
                       LV_GRID_ALIGN_STRETCH, 1, 1);      //row
   _clocklabel = lv_label_create(obj);
 
   //bottom row
   obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 1,  //column
+  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 2,  //column
                       LV_GRID_ALIGN_STRETCH, 2, 1);      //row
 }
 
@@ -81,5 +99,9 @@ void MainView::Update() {
 }
 
 void MainView::GoToTimeSetting(){
-  refToNav.NavigateTo(e_TimeSetting);
+  refToNav.NavigateTo(e_TimeSetting, 0);
+}
+
+void MainView::GoToAlarmsManager(){
+  refToNav.NavigateTo(e_AlarmsManager, 0);
 }

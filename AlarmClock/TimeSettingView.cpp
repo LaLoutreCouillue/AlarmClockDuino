@@ -10,7 +10,7 @@ static void btn_event(lv_event_t * e) {
   lv_obj_t * btn = (lv_obj_t*)lv_event_get_target(e);
 
   //Get Back the structure
-  ButtonContext* ctx = (ButtonContext*)lv_obj_get_user_data(btn);
+  ControlContext* ctx = (ControlContext*)lv_obj_get_user_data(btn);
   TimeSettingView* instance = static_cast<TimeSettingView*>(ctx->instance);; //store the instance
   uint8_t id = ctx->id; //store the index
   uint8_t action = ctx->action;
@@ -33,7 +33,7 @@ static void btn_event(lv_event_t * e) {
 
 TimeSettingView::TimeSettingView(Clock& c, NavigationHandler& nav) : refToC(c), refToNav(nav) {}
 
-void TimeSettingView::Render(int width, int height) {
+void TimeSettingView::Render(int width, int height, uint8_t param) {
   //Clean old view
   lv_obj_clean(lv_scr_act());
   //Display & Grid Setup
@@ -79,8 +79,8 @@ void TimeSettingView::Render(int width, int height) {
     lv_obj_center(label);
 
     // Store the index and the instance as user data
-    _buttonContexts[i] = { this, i, 1 };
-    lv_obj_set_user_data(button, &_buttonContexts[i]);
+    _controlContexts[i] = { this, 1, i };
+    lv_obj_set_user_data(button, &_controlContexts[i]);
   }
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
@@ -96,8 +96,8 @@ void TimeSettingView::Render(int width, int height) {
   lv_label_set_text(label, "Save");
   lv_obj_center(label);
   // Store the index and the instance as user data
-  _buttonContexts[5] = { this, 0, 3 };
-  lv_obj_set_user_data(button, &_buttonContexts[5]);
+  _controlContexts[5] = { this, 3, 0 };
+  lv_obj_set_user_data(button, &_controlContexts[5]);
 
   //middle row
   obj = lv_obj_create(grid);
@@ -142,8 +142,8 @@ void TimeSettingView::Render(int width, int height) {
     lv_obj_center(label);
 
     // Store the index and the instance as user data
-    _buttonContexts[i + 6] = { this, i, 2 };
-    lv_obj_set_user_data(button, &_buttonContexts[i + 6]);
+    _controlContexts[i + 6] = { this, 2, i };
+    lv_obj_set_user_data(button, &_controlContexts[i + 6]);
   }
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
@@ -159,8 +159,8 @@ void TimeSettingView::Render(int width, int height) {
   lv_label_set_text(label, "Exit");
   lv_obj_center(label);
   // Store the index and the instance as user data
-    _buttonContexts[11] = { this, 0, 4 };
-  lv_obj_set_user_data(button, & _buttonContexts[11]);
+    _controlContexts[11] = { this, 4, 0 };
+  lv_obj_set_user_data(button, & _controlContexts[11]);
 }
 
 void TimeSettingView::Update() {
@@ -172,7 +172,7 @@ void TimeSettingView::SaveTime(){
 }
 
 void TimeSettingView::GoToMain(){
-  refToNav.NavigateTo(e_Main);
+  refToNav.NavigateTo(e_Main, 0);
 }
 
 void TimeSettingView::DecreaseTime(uint8_t id){
@@ -198,7 +198,7 @@ void TimeSettingView::DecreaseTime(uint8_t id){
           if (_time.tm_hour > 1){
             _time.tm_hour -= 1;
           } else {
-            _time.tm_hour = 59;
+            _time.tm_hour = 23;
           }
           break;
       case 4: //Minutes
@@ -233,7 +233,7 @@ void TimeSettingView::IncreaseTime(uint8_t id){
           _time.tm_year += 1;
           break;
       case 3: //Hour
-          if (_time.tm_hour < 59){
+          if (_time.tm_hour < 23){
             _time.tm_hour += 1;
           } else {
             _time.tm_hour = 0;
@@ -255,6 +255,6 @@ void TimeSettingView::RefreshTime(){
   lv_label_set_text_fmt(_dayLabel, "%d", _time.tm_mday);
   lv_label_set_text_fmt(_monthLabel, "%d", _time.tm_mon + 1);
   lv_label_set_text_fmt(_yearLabel, "%d", _time.tm_year + 1900);
-  lv_label_set_text_fmt(_hourLabel, "%d", _time.tm_hour);
-  lv_label_set_text_fmt(_minuteLabel, "%d", _time.tm_min);
+  lv_label_set_text_fmt(_hourLabel, "%02d", _time.tm_hour);
+  lv_label_set_text_fmt(_minuteLabel, "%02d", _time.tm_min);
 }

@@ -5,16 +5,17 @@
 #include "clock.h"
 #include "IView.h"
 #include "NavigationHandler.H"
-#include "ButtonContext.h"
+#include "ControlContext.h"
 
 class MainView : public IView{
   public:
     MainView(Clock& c, NavigationHandler& nav);
-    void Render(int width, int height);
+    void Render(int width, int height, uint8_t param);
     void Update();
     void GoToTimeSetting();
+    void GoToAlarmsManager();
   private:
-    ButtonContext _buttonContexts[2];
+    ControlContext _controlContexts[2];
     Clock& refToC;
     NavigationHandler& refToNav;
     lv_obj_t* _clocklabel;

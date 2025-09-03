@@ -4,18 +4,20 @@
 
 typedef struct{
   // string Name;
-  uint8_t Second; 
   uint8_t Minute; 
   uint8_t Hour;
-  bool ActiveDay[6]; //day the alarm is active, 0 is Monday 6 is Sunday
+  bool ActiveDay[7]; //day the alarm is active, 0 is Monday 6 is Sunday
   bool IsActive;
-}alarm;
+}Alarm;
 
 class AlarmsManager {
   public:
-    alarm Alarms[2];
     void Init();
-    void AddAlarm();
+    Alarm GetAlarm(uint8_t id);
+    void ToggleAlarm(uint8_t id, bool value);
+    void ModifyAlarm(uint8_t id, Alarm newAlarm);
+  private:
+    Alarm _alarms[3];
 };
 
 #endif
