@@ -50,43 +50,25 @@ void MainView::Render(int width, int height, uint8_t param) {
   //top row
   lv_obj_t* obj;
   lv_obj_t* label;
-  lv_obj_t* button;
   //First button
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 1,  //column
                       LV_GRID_ALIGN_STRETCH, 0, 1);      //row
-  button = lv_btn_create(obj);
-  lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
-  lv_obj_center(button);
-  lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
-  //Add the label
-  label = lv_label_create(button);
-  lv_label_set_text(label, "TimeSettings");
-  lv_obj_center(label);
-  // Store the index and the instance as user data
   _controlContexts[0] = { this, 1, 0 };
-  lv_obj_set_user_data(button, & _controlContexts[0]);
+  AddButton(obj, btn_event, & _controlContexts[0], "TimeSettings");
   //Second button
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 1, 1,  //column
                       LV_GRID_ALIGN_STRETCH, 0, 1);      //row
-  button = lv_btn_create(obj);
-  lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
-  lv_obj_center(button);
-  lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
-  //Add the label
-  label = lv_label_create(button);
-  lv_label_set_text(label, "Alarm Settings");
-  lv_obj_center(label);
-  // Store the index and the instance as user data
   _controlContexts[1] = { this, 2, 0 };
-  lv_obj_set_user_data(button, & _controlContexts[1]);
+  AddButton(obj, btn_event, & _controlContexts[1], "Alarm Settings");
 
   //middle row
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 2,  //column
                       LV_GRID_ALIGN_STRETCH, 1, 1);      //row
   _clocklabel = lv_label_create(obj);
+  RefreshTime();
 
   //bottom row
   obj = lv_obj_create(grid);
@@ -95,6 +77,10 @@ void MainView::Render(int width, int height, uint8_t param) {
 }
 
 void MainView::Update() {
+  RefreshTime();
+}
+
+void MainView::RefreshTime(){
   lv_label_set_text(_clocklabel, refToC.GetTimeAsString().c_str());
 }
 

@@ -68,36 +68,15 @@ void TimeSettingView::Render(int width, int height, uint8_t param) {
     lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, i, 1,  //column
                         LV_GRID_ALIGN_STRETCH, 0, 1);      //row
     
-    //Create the button
-    button = lv_btn_create(obj);
-    lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
-    lv_obj_center(button);
-    lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
-    //Add the label
-    label = lv_label_create(button);
-    lv_label_set_text(label, "+");
-    lv_obj_center(label);
-
-    // Store the index and the instance as user data
     _controlContexts[i] = { this, 1, i };
-    lv_obj_set_user_data(button, &_controlContexts[i]);
+    AddButton(obj, btn_event, & _controlContexts[i], "+");
   }
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
                       LV_GRID_ALIGN_STRETCH, 0, 1);      //row
   
-  //Create the button
-  button = lv_btn_create(obj);
-  lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
-  lv_obj_center(button);
-  lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
-  //Add the label
-  label = lv_label_create(button);
-  lv_label_set_text(label, "Save");
-  lv_obj_center(label);
-  // Store the index and the instance as user data
   _controlContexts[5] = { this, 3, 0 };
-  lv_obj_set_user_data(button, &_controlContexts[5]);
+  AddButton(obj, btn_event, & _controlContexts[5], "Save");
 
   //middle row
   obj = lv_obj_create(grid);
@@ -131,36 +110,15 @@ void TimeSettingView::Render(int width, int height, uint8_t param) {
     lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, i, 1,  //column
                         LV_GRID_ALIGN_STRETCH, 2, 1);      //row
     
-    //Create the button
-    button = lv_btn_create(obj);
-    lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
-    lv_obj_center(button);
-    lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
-    //Add the label
-    label = lv_label_create(button);
-    lv_label_set_text(label, "-");
-    lv_obj_center(label);
-
-    // Store the index and the instance as user data
     _controlContexts[i + 6] = { this, 2, i };
-    lv_obj_set_user_data(button, &_controlContexts[i + 6]);
+    AddButton(obj, btn_event, & _controlContexts[i + 6], "-");
   }
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
                       LV_GRID_ALIGN_STRETCH, 2, 1);      //row
   
-  //Create the button
-  button = lv_btn_create(obj);
-  lv_obj_set_size(button, LV_PCT(100), LV_PCT(100));
-  lv_obj_center(button);
-  lv_obj_add_event_cb(button, btn_event, LV_EVENT_CLICKED, NULL);
-  //Add the label
-  label = lv_label_create(button);
-  lv_label_set_text(label, "Exit");
-  lv_obj_center(label);
-  // Store the index and the instance as user data
-    _controlContexts[11] = { this, 4, 0 };
-  lv_obj_set_user_data(button, & _controlContexts[11]);
+  _controlContexts[11] = { this, 4, 0 };
+  AddButton(obj, btn_event, & _controlContexts[11], "Exit");
 }
 
 void TimeSettingView::Update() {

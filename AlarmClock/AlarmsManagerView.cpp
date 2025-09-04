@@ -131,17 +131,8 @@ void AlarmsManagerView::Render(int width, int height, uint8_t param) {
   obj = lv_obj_create(grid);
   lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 3, 1,  //column
                       LV_GRID_ALIGN_STRETCH, 0, 6);      //row
-  control = lv_btn_create(obj);
-  lv_obj_set_size(control, LV_PCT(100), LV_PCT(100));
-  lv_obj_center(control);
-  lv_obj_add_event_cb(control, control_event, LV_EVENT_CLICKED, NULL);
-  //Add the label
-  label = lv_label_create(control);
-  lv_label_set_text(label, "Back");
-  lv_obj_center(label);
-  // Store the index and the instance as user data
   _controlContexts[6] = { this, 3, 0 };
-  lv_obj_set_user_data(control, & _controlContexts[6]);
+  AddButton(obj, btn_event, & _controlContexts[6], "Back");
 
 }
 

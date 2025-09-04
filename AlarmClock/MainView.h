@@ -15,6 +15,7 @@ class MainView : public IView{
     void GoToTimeSetting();
     void GoToAlarmsManager();
   private:
+    void RefreshTime();
     ControlContext _controlContexts[2];
     Clock& refToC;
     NavigationHandler& refToNav;
