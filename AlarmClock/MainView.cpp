@@ -24,56 +24,40 @@ static void btn_event(lv_event_t * e) {
 }
 
 
-MainView::MainView(Clock& c, NavigationHandler& nav) : refToC(c), refToNav(nav) {}
+MainView::MainView(Clock& c, NavigationHandler& nav) : _refToC(c), _refToNav(nav) {}
 
 void MainView::Render(int width, int height, uint8_t param) {
   //Clean old view
   lv_obj_clean(lv_scr_act());
-  //Display & Grid Setup
-  lv_obj_t* screen = lv_obj_create(lv_scr_act());
-  lv_obj_set_size(screen, width, height);
-  
+
   static lv_coord_t col_dsc[] = {
     LV_GRID_FR(1), LV_GRID_FR(1), 
     LV_GRID_TEMPLATE_LAST
   };
-
   static lv_coord_t row_dsc[] = {
     LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1),
     LV_GRID_TEMPLATE_LAST
   };
-
-  lv_obj_t* grid = lv_obj_create(lv_scr_act());
-  lv_obj_set_grid_dsc_array(grid, col_dsc, row_dsc);
-  lv_obj_set_size(grid, width, height);
-
+  lv_obj_t* grid = CreateGridAndInitScreen(width, height, col_dsc, row_dsc);
+  
+  lv_obj_t* cell;
   //top row
-  lv_obj_t* obj;
-  lv_obj_t* label;
   //First button
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 0, 1);      //row
+  cell = CreateCell(grid, 0, 1, 0, 1);
   _controlContexts[0] = { this, 1, 0 };
-  AddButton(obj, btn_event, & _controlContexts[0], "TimeSettings");
+  AddButton(cell, btn_event, & _controlContexts[0], "TimeSettings");
   //Second button
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 1, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 0, 1);      //row
+  cell = CreateCell(grid, 1, 1, 0, 1);
   _controlContexts[1] = { this, 2, 0 };
-  AddButton(obj, btn_event, & _controlContexts[1], "Alarm Settings");
+  AddButton(cell, btn_event, & _controlContexts[1], "Alarm Settings");
 
   //middle row
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 2,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
-  _clocklabel = lv_label_create(obj);
+  cell = CreateCell(grid, 0, 2, 1, 1);
+  _clocklabel = lv_label_create(cell);
   RefreshTime();
 
   //bottom row
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 2,  //column
-                      LV_GRID_ALIGN_STRETCH, 2, 1);      //row
+  cell = CreateCell(grid, 0, 2, 2, 1);
 }
 
 void MainView::Update() {
@@ -81,13 +65,13 @@ void MainView::Update() {
 }
 
 void MainView::RefreshTime(){
-  lv_label_set_text(_clocklabel, refToC.GetTimeAsString().c_str());
+  lv_label_set_text(_clocklabel, _refToC.GetTimeAsString().c_str());
 }
 
 void MainView::GoToTimeSetting(){
-  refToNav.NavigateTo(e_TimeSetting, 0);
+  _refToNav.NavigateTo(e_TimeSetting, 0);
 }
 
 void MainView::GoToAlarmsManager(){
-  refToNav.NavigateTo(e_AlarmsManager, 0);
+  _refToNav.NavigateTo(e_AlarmsManager, 0);
 }

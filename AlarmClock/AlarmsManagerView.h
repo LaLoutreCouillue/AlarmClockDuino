@@ -17,7 +17,7 @@ class AlarmsManagerView : public IView{
     void ToggleAlarm(uint8_t id, bool value);
   private:
     ControlContext _controlContexts[7];
-    AlarmsManager& refToAm;
-    NavigationHandler& refToNav;
+    AlarmsManager& _refToAm;
+    NavigationHandler& _refToNav;
 };
 #endif

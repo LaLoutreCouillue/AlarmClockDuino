@@ -17,8 +17,8 @@ class MainView : public IView{
   private:
     void RefreshTime();
     ControlContext _controlContexts[2];
-    Clock& refToC;
-    NavigationHandler& refToNav;
+    Clock& _refToC;
+    NavigationHandler& _refToNav;
     lv_obj_t* _clocklabel;
 };
 #endif

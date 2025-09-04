@@ -31,94 +31,61 @@ static void btn_event(lv_event_t * e) {
   }
 }
 
-TimeSettingView::TimeSettingView(Clock& c, NavigationHandler& nav) : refToC(c), refToNav(nav) {}
+TimeSettingView::TimeSettingView(Clock& c, NavigationHandler& nav) : _refToC(c), _refToNav(nav) {}
 
 void TimeSettingView::Render(int width, int height, uint8_t param) {
   //Clean old view
   lv_obj_clean(lv_scr_act());
-  //Display & Grid Setup
-  lv_obj_t* screen = lv_obj_create(lv_scr_act());
-  lv_obj_set_size(screen, width, height);
 
   static lv_coord_t col_dsc[] = {
     LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(2),
     LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1),
     LV_GRID_TEMPLATE_LAST
   };
-
   static lv_coord_t row_dsc[] = {
     LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1),
     LV_GRID_TEMPLATE_LAST
   };
-  
-  lv_obj_t* grid = lv_obj_create(lv_scr_act());
-  lv_obj_set_grid_dsc_array(grid, col_dsc, row_dsc);
-  lv_obj_set_size(grid, width, height);
+  lv_obj_t* grid = CreateGridAndInitScreen(width, height, col_dsc, row_dsc);
 
   //variables
-  lv_obj_t* obj;
-  lv_obj_t* label;
-  lv_obj_t* button;
-  _time = refToC.GetTime();
+  lv_obj_t* cell;
+  _time = _refToC.GetTime();
 
   //top row
   //create top row + buttons
   for(uint8_t i = 0; i < 5; i++) {    
-    obj = lv_obj_create(grid);
-    lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, i, 1,  //column
-                        LV_GRID_ALIGN_STRETCH, 0, 1);      //row
-    
+    cell = CreateCell(grid, i, 1, 0, 1);
     _controlContexts[i] = { this, 1, i };
-    AddButton(obj, btn_event, & _controlContexts[i], "+");
+    AddButton(cell, btn_event, & _controlContexts[i], "+");
   }
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 0, 1);      //row
-  
+  cell = CreateCell(grid, 5, 1, 0, 1);
   _controlContexts[5] = { this, 3, 0 };
-  AddButton(obj, btn_event, & _controlContexts[5], "Save");
+  AddButton(cell, btn_event, & _controlContexts[5], "Save");
 
   //middle row
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 0, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
-  _dayLabel = lv_label_create(obj);
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 1, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
-  _monthLabel = lv_label_create(obj);
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 2, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
-  _yearLabel = lv_label_create(obj);
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 3, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
-  _hourLabel = lv_label_create(obj);
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 4, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
-  _minuteLabel = lv_label_create(obj);
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 1, 1);      //row
+  cell = CreateCell(grid, 0, 1, 1, 1);
+  _dayLabel = lv_label_create(cell);
+  cell = CreateCell(grid, 1, 1, 1, 1);
+  _monthLabel = lv_label_create(cell);
+  cell = CreateCell(grid, 2, 1, 1, 1);
+  _yearLabel = lv_label_create(cell);
+  cell = CreateCell(grid, 3, 1, 1, 1);
+  _hourLabel = lv_label_create(cell);
+  cell = CreateCell(grid, 4, 1, 1, 1);
+  _minuteLabel = lv_label_create(cell);
+  cell = CreateCell(grid, 5, 1, 1, 1);
   RefreshTime();
   //bottom row
   //create bottom row - buttons
   for(uint8_t i = 0; i < 5; i++) {    
-    obj = lv_obj_create(grid);
-    lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, i, 1,  //column
-                        LV_GRID_ALIGN_STRETCH, 2, 1);      //row
-    
+    cell = CreateCell(grid, i, 1, 2, 1);
     _controlContexts[i + 6] = { this, 2, i };
-    AddButton(obj, btn_event, & _controlContexts[i + 6], "-");
+    AddButton(cell, btn_event, & _controlContexts[i + 6], "-");
   }
-  obj = lv_obj_create(grid);
-  lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, 5, 1,  //column
-                      LV_GRID_ALIGN_STRETCH, 2, 1);      //row
-  
+  cell = CreateCell(grid, 5, 1, 2, 1);
   _controlContexts[11] = { this, 4, 0 };
-  AddButton(obj, btn_event, & _controlContexts[11], "Exit");
+  AddButton(cell, btn_event, & _controlContexts[11], "Exit");
 }
 
 void TimeSettingView::Update() {
@@ -126,11 +93,11 @@ void TimeSettingView::Update() {
 }
 
 void TimeSettingView::SaveTime(){
-  refToC.SetTime(_time);
+  _refToC.SetTime(_time);
 }
 
 void TimeSettingView::GoToMain(){
-  refToNav.NavigateTo(e_Main, 0);
+  _refToNav.NavigateTo(e_Main, 0);
 }
 
 void TimeSettingView::DecreaseTime(uint8_t id){

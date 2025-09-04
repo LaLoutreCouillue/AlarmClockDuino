@@ -22,8 +22,8 @@ class AlarmEditionView : public IView{
     void RefreshTime();
     uint8_t _alarmId;
 	  Alarm _alarm;
-    AlarmsManager& refToAm;
-    NavigationHandler& refToNav;
+    AlarmsManager& _refToAm;
+    NavigationHandler& _refToNav;
     lv_obj_t* _hourLabel;
     lv_obj_t* _minuteLabel;
 };

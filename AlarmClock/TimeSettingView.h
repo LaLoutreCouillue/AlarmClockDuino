@@ -20,8 +20,8 @@ class TimeSettingView : public IView{
     ControlContext _controlContexts[12];
     void RefreshTime();
     tm _time;
-    Clock& refToC;
-    NavigationHandler& refToNav;
+    Clock& _refToC;
+    NavigationHandler& _refToNav;
     lv_obj_t* _dayLabel;
     lv_obj_t* _monthLabel;
     lv_obj_t* _yearLabel;
