@@ -38,7 +38,7 @@ AlarmEditionView::AlarmEditionView(AlarmsManager& am, NavigationHandler& nav) : 
 
 void AlarmEditionView::Render(int width, int height, uint8_t param) {
   //Clean old view
-  lv_obj_clean(lv_scr_act());
+  CleanScreen();
 
   static lv_coord_t col_dsc[] = {
     LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(2),
@@ -59,26 +59,25 @@ void AlarmEditionView::Render(int width, int height, uint8_t param) {
 
   //Row 1
   cell = CreateCell(grid, 0, 3, 0, 1);
-  label = lv_label_create(cell);
-  lv_label_set_text(label, "Alarm");
+  CreateLabel(cell, 40, "Alarm");
   
   cell = CreateCell(grid, 3, 1, 0, 1);
   _controlContexts[0] = { this, 4, 0 };
-  AddButton(cell, btn_event, & _controlContexts[0], "Save");
+  CreateButton(cell, btn_event, & _controlContexts[0], "Save");
 
   //Row 2
   //create + buttons
   for(uint8_t i = 0; i < 2; i++) {    
     cell = CreateCell(grid, i, 1, 1, 1);
     _controlContexts[i + 1] = { this, 1, i };
-    AddButton(cell, btn_event, & _controlContexts[i + 1], "+");
+    CreateButton(cell, btn_event, & _controlContexts[i + 1], "+");
   }
 
   //Row 3
   cell = CreateCell(grid, 0, 1, 2, 1);
-  _hourLabel = lv_label_create(cell);
+  _hourLabel = CreateLabel(cell, 40, "");
   cell = CreateCell(grid, 1, 1, 2, 1);
-  _minuteLabel = lv_label_create(cell);
+  _minuteLabel = CreateLabel(cell, 40, "");
   RefreshTime();
 
   //Row 4
@@ -86,21 +85,24 @@ void AlarmEditionView::Render(int width, int height, uint8_t param) {
   for(uint8_t i = 0; i < 2; i++) {    
     cell = CreateCell(grid, i, 1, 3, 1);
     _controlContexts[i + 3] = { this, 2, i };
-    AddButton(cell, btn_event, & _controlContexts[i + 3], "-");
+    CreateButton(cell, btn_event, & _controlContexts[i + 3], "-");
   }
 
   //Multi Row
   //create checkboxes
   cell = CreateCell(grid, 2, 1, 1, 3);
-  lv_obj_set_flex_flow(cell, LV_FLEX_FLOW_COLUMN);
+  lv_obj_set_flex_flow(cell, LV_FLEX_FLOW_ROW_WRAP);
   for(uint8_t i = 0; i < 7; i++) {
     _controlContexts[i+5] = { this, 3, i };
-    AddCheckbox(cell, btn_event, &_controlContexts[i+5], _alarm.ActiveDay[i], _dayNames[i], 1);
+    
+    lv_obj_t* checkbox = CreateCheckbox(cell, btn_event, &_controlContexts[i+5], _alarm.ActiveDay[i], _dayNames[i]);
+    // lv_obj_set_flex_grow(checkbox, 1); 
+    lv_obj_set_size(checkbox, 120, LV_SIZE_CONTENT);
   }
 
   cell = CreateCell(grid, 3, 1, 3, 1);
   _controlContexts[12] = { this, 5, 0 };
-  AddButton(cell, btn_event, & _controlContexts[12], "Exit");
+  CreateButton(cell, btn_event, & _controlContexts[12], "Exit");
 }
 
 void AlarmEditionView::Update() {

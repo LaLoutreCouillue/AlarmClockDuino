@@ -33,7 +33,7 @@ AlarmsManagerView::AlarmsManagerView(AlarmsManager& am, NavigationHandler& nav) 
 
 void AlarmsManagerView::Render(int width, int height, uint8_t param) {
   //Clean old view
-  lv_obj_clean(lv_scr_act());
+  CleanScreen();
   
   static lv_coord_t col_dsc[] = {
     LV_GRID_FR(2), LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_FR(1), 
@@ -58,19 +58,16 @@ void AlarmsManagerView::Render(int width, int height, uint8_t param) {
     Alarm alarm = _refToAm.GetAlarm(i);
     //Alarm Name
     cell = CreateCell(grid, 0, 1, row, 1);
-    label = lv_label_create(cell);
-    lv_label_set_text_fmt(label, "Alarm %d", i);
+    CreateLabel(cell, 40, "Alarm %d", i);
     //Alarm Hour
     cell = CreateCell(grid, 1, 1, row, 1);
-    label = lv_label_create(cell);
-    lv_label_set_text_fmt(label, "%02d:%02d", alarm.Hour, alarm.Minute);
+    CreateLabel(cell, 40, "%02d:%02d", alarm.Hour, alarm.Minute);
     //Edit Button
     cell = CreateCell(grid, 2, 1, row, 1);
     _controlContexts[row] = { this, 1, i };
-    AddButton(cell, control_event, & _controlContexts[row], "Edit");
+    CreateButton(cell, control_event, & _controlContexts[row], "Edit");
     //Active Days
     cell = CreateCell(grid, 0, 2, row + 1, 1);
-    label = lv_label_create(cell);
     for(uint8_t j = 0; j < 7; j++) {  
       if (alarm.ActiveDay[j]) {
         if (strlen(result) > 0) {
@@ -81,18 +78,18 @@ void AlarmsManagerView::Render(int width, int height, uint8_t param) {
         strcat(result, _dayNames[j]);  // Append day name
       }
     }
-    lv_label_set_text(label, result);
+    CreateLabel(cell, 32, result);
     
     //Switch
     cell = CreateCell(grid, 2, 1, row+1, 1);
     _controlContexts[row+1] = { this, 2, i };
-    AddSwitch(cell, control_event, &_controlContexts[row+1], alarm.IsActive);
+    CreateSwitch(cell, control_event, &_controlContexts[row+1], alarm.IsActive);
   }
   
   //Back button
   cell = CreateCell(grid, 3, 1, 0, 6);
   _controlContexts[6] = { this, 3, 0 };
-  AddButton(cell, control_event, & _controlContexts[6], "Back");
+  CreateButton(cell, control_event, & _controlContexts[6], "Back");
 
 }
 

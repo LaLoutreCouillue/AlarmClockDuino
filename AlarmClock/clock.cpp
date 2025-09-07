@@ -3,8 +3,6 @@
 #include "Clock.h"
 #include "Arduino.h"
 
-// void Clock::RTCset();
-
 void Clock::Init() {
   RTCset();
 }

@@ -35,7 +35,7 @@ TimeSettingView::TimeSettingView(Clock& c, NavigationHandler& nav) : _refToC(c),
 
 void TimeSettingView::Render(int width, int height, uint8_t param) {
   //Clean old view
-  lv_obj_clean(lv_scr_act());
+  CleanScreen();
 
   static lv_coord_t col_dsc[] = {
     LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(2),
@@ -57,23 +57,23 @@ void TimeSettingView::Render(int width, int height, uint8_t param) {
   for(uint8_t i = 0; i < 5; i++) {    
     cell = CreateCell(grid, i, 1, 0, 1);
     _controlContexts[i] = { this, 1, i };
-    AddButton(cell, btn_event, & _controlContexts[i], "+");
+    CreateButton(cell, btn_event, & _controlContexts[i], "+");
   }
   cell = CreateCell(grid, 5, 1, 0, 1);
   _controlContexts[5] = { this, 3, 0 };
-  AddButton(cell, btn_event, & _controlContexts[5], "Save");
+  CreateButton(cell, btn_event, & _controlContexts[5], "Save");
 
   //middle row
   cell = CreateCell(grid, 0, 1, 1, 1);
-  _dayLabel = lv_label_create(cell);
+  _dayLabel = CreateLabel(cell, 48, "");
   cell = CreateCell(grid, 1, 1, 1, 1);
-  _monthLabel = lv_label_create(cell);
+  _monthLabel = CreateLabel(cell, 48, "");
   cell = CreateCell(grid, 2, 1, 1, 1);
-  _yearLabel = lv_label_create(cell);
+  _yearLabel = CreateLabel(cell, 48, "");
   cell = CreateCell(grid, 3, 1, 1, 1);
-  _hourLabel = lv_label_create(cell);
+  _hourLabel = CreateLabel(cell, 48, "");
   cell = CreateCell(grid, 4, 1, 1, 1);
-  _minuteLabel = lv_label_create(cell);
+  _minuteLabel = CreateLabel(cell, 48, "");
   cell = CreateCell(grid, 5, 1, 1, 1);
   RefreshTime();
   //bottom row
@@ -81,11 +81,11 @@ void TimeSettingView::Render(int width, int height, uint8_t param) {
   for(uint8_t i = 0; i < 5; i++) {    
     cell = CreateCell(grid, i, 1, 2, 1);
     _controlContexts[i + 6] = { this, 2, i };
-    AddButton(cell, btn_event, & _controlContexts[i + 6], "-");
+    CreateButton(cell, btn_event, & _controlContexts[i + 6], "-");
   }
   cell = CreateCell(grid, 5, 1, 2, 1);
   _controlContexts[11] = { this, 4, 0 };
-  AddButton(cell, btn_event, & _controlContexts[11], "Exit");
+  CreateButton(cell, btn_event, & _controlContexts[11], "Exit");
 }
 
 void TimeSettingView::Update() {
