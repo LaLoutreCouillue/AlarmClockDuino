@@ -1,8 +1,9 @@
 #ifndef IVIEW_H
 #define IVIEW_H
 #include "Arduino.h"
-#include "lvgl.h"
 #include "ControlContext.h"
+#include <Arduino_H7_Video.h>
+#include <lvgl.h>
 
 class IView {
 public:

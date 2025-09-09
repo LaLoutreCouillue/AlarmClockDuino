@@ -1,3 +1,6 @@
+
+#include <Arduino_H7_Video.h>
+#include <lvgl.h>
 #include "iView.h"
 
 void IView::CleanScreen(){

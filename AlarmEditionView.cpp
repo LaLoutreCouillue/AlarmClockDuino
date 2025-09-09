@@ -1,6 +1,6 @@
-#include "widgets/label/lv_label.h"
-#include "Arduino_H7_Video.h"
-#include "lvgl.h"
+
+#include <Arduino_H7_Video.h>
+#include <lvgl.h>
 #include "AlarmEditionView.h"
 #include "Arduino.h"
 

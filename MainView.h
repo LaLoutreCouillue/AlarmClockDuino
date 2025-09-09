@@ -1,7 +1,8 @@
 #ifndef MAINVIEW_H
 #define MAINVIEW_H
-#include "Arduino_H7_Video.h"
-#include "lvgl.h"
+
+#include <Arduino_H7_Video.h>
+#include <lvgl.h>
 #include "clock.h"
 #include "IView.h"
 #include "NavigationHandler.H"

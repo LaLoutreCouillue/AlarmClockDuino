@@ -5,8 +5,8 @@
 #include "AlarmEditionView.h"
 #include "AlarmsManager.h"
 #include "NavigationHandler.h"
-#include "Arduino_H7_Video.h"
-#include "lvgl.h"
+#include <Arduino_H7_Video.h>
+#include <lvgl.h>
 #include "Arduino_GigaDisplayTouch.h"
 
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);

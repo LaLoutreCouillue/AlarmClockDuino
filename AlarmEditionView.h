@@ -1,7 +1,7 @@
 #ifndef ALARMEDITIONVIEW_H
 #define ALARMEDITIONVIEW_H
-#include "Arduino_H7_Video.h"
-#include "lvgl.h"
+#include <Arduino_H7_Video.h>
+#include <lvgl.h>
 #include "AlarmsManager.h"
 #include "IView.h"
 #include "NavigationHandler.h"
